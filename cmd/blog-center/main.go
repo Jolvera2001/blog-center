@@ -1,6 +1,7 @@
 package main
 
 import (
+	"blog-center/internal/repository"
 	"log"
 	"net/http"
 
@@ -11,7 +12,12 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading env file")
+		log.Fatal("Error loading dotenv!: ", err.Error())
+	}
+
+	_, err = repository.NewDB()
+	if err != nil {
+		log.Fatal("Error connecting to db!:", err.Error())
 	}
 
 	r := gin.Default()
@@ -22,3 +28,4 @@ func main() {
 	})
 	r.Run()
 }
+
