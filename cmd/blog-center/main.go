@@ -47,7 +47,7 @@ func main() {
 				"message": "Hello World!",
 			})
 		})
-		r.Run(port)
+		r.Run(":" + port)
 	}
 
 }
