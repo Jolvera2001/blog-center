@@ -1,5 +1,5 @@
 # GO image
-FROM golang:1.23 AS builder
+FROM golang:1.23-alpine AS builder
 
 # set current working directory
 WORKDIR /app
@@ -15,6 +15,9 @@ COPY internal/ ./internal/
 # Build the go application
 RUN go build -o main ./cmd/blog-center/main.go
 
+# checking if exe is in container
+RUN ls -l /app/
+
 # use a smaller image for final exe
 FROM alpine:latest
 
@@ -24,5 +27,11 @@ WORKDIR /root/
 # copy compiled binary
 COPY --from=builder /app/main .
 
+# Copying .env for local development
+COPY .env .
+
+# make it executable
+RUN chmod +x ./main
+
 # command to run exe
-CMD [ "./main" ]
+CMD ["./main"]

@@ -4,6 +4,7 @@ import (
 	"blog-center/internal/repository"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -15,7 +16,9 @@ func main() {
 		log.Fatal("Error loading dotenv!: ", err.Error())
 	}
 
-	_, err = repository.NewDB()
+	maxRetries := 5
+	maxDelay := 5 * time.Second
+	_, err = repository.NewDB(maxRetries, maxDelay)
 	if err != nil {
 		log.Fatal("Error connecting to db!:", err.Error())
 	}
