@@ -8,7 +8,7 @@ import (
 )
 
 func NewDB() (*gorm.DB, error) {
-	dsn := os.Getenv("MYSQL_DSN")
+	dsn := os.Getenv("DB_DSN")
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
