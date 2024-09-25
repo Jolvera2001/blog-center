@@ -17,7 +17,7 @@ func main() {
 	}
 
 	maxRetries := 5
-	maxDelay := 5 * time.Second
+	maxDelay := 15 * time.Second
 	_, err = repository.NewDB(maxRetries, maxDelay)
 	if err != nil {
 		log.Fatal("Error connecting to db!:", err.Error())
