@@ -1,0 +1,24 @@
+version: '3.8'
+
+services: 
+  goApp: # go backend application
+    build: ./goApp
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_DSN=${DB_DSN}
+    depends_on:
+      - db
+
+  db: # Mysql db
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql  # Persist database data
+
+volumes:
+  db-data:  # Named volume for database persistence
