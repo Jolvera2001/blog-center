@@ -27,8 +27,9 @@ WORKDIR /root/
 # copy compiled binary
 COPY --from=builder /app/main .
 
-# Copying .env for local development
-COPY .env .
+# Conditional copy based on build argument
+ARG COPY_ENV=false
+RUN if [ "$COPY_ENV" = "true" ]; then cp /app/.env .; fi
 
 # make it executable
 RUN chmod +x ./main
