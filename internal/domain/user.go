@@ -8,3 +8,11 @@ type User struct {
 	Email     string `gorm:"uniqueIndex;size:255"`
 	CreatedAt time.Time
 }
+
+
+type UserRepository interface {
+	Create(user *User) error
+	FindByID(id int) (*User, error)
+	Update(id int) error
+	Delete(id int) error
+}
