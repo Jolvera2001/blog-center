@@ -27,7 +27,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - db-data:/var/lib/mysql  # Persist database data
+      - "../files/mysql-data:/var/lib/mysql" # Persist database data
     logging:
       driver: json-file
       options:
