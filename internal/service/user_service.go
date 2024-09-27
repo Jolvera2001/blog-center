@@ -28,8 +28,8 @@ func (s *UserService) RegisterUser(dto dtos.UserDto) (string, error) {
 	return newUser.ID, nil
 }
 
-func (s *UserService) GetUserProfile(id string) (*domain.User, error) {
-	foundUser, err := s.UserRepo.FindByID(id)
+func (s *UserService) GetUserProfile(uuid string) (*domain.User, error) {
+	foundUser, err := s.UserRepo.FindByID(uuid)
 	if err != nil {
 		return &domain.User{}, err
 	}
