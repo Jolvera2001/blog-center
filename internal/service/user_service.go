@@ -34,9 +34,24 @@ func (s *UserService) GetUserProfile(id string) (*domain.User, error) {
 }
 
 func (s *UserService) UpdateUserProfile(uuid string, dto dtos.UserDto) error {
+	existingUser, err := s.UserRepo.FindByID(uuid)
+	if err != nil {
+		return err
+	}
 
+	if dto.Name != "" {
+		existingUser.Name = dto.Name
+	}
+	if dto.Email != "" {
+		existingUser.Email = dto.Email
+	}
+	if dto.Password != "" {
+		existingUser.Password = dto.Password
+	}
+
+	return s.UserRepo.Update(existingUser)
 }
 
 func (s *UserService) DeleteUserAccount(uuid string) error {
-
+	return s.UserRepo.Delete(uuid)
 }
