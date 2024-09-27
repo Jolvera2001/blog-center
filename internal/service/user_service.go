@@ -9,6 +9,10 @@ type UserService struct {
 	UserRepo domain.IUserRepository
 }
 
+func NewUserService(userRepo domain.IUserRepository) *UserService {
+	return &UserService{UserRepo: userRepo}
+}
+
 func (s *UserService) RegisterUser(dto dtos.UserDto) (string, error) {
 	newUser := domain.User{
 		Name: dto.Name,

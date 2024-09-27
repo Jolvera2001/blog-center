@@ -12,6 +12,10 @@ type UserHandler struct {
 	UserService service.IUserService
 }
 
+func NewUserHandler(service service.IUserService) *UserHandler {
+	return &UserHandler{UserService: service}
+}
+
 
 func (h *UserHandler) CreateUserProfile(c *gin.Context) {
 	var dto dtos.UserDto

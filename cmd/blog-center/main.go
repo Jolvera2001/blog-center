@@ -1,7 +1,11 @@
 package main
 
 import (
+	"blog-center/internal"
+	"blog-center/internal/domain"
+	"blog-center/internal/handlers"
 	"blog-center/internal/repository"
+	"blog-center/internal/service"
 	"context"
 	"log"
 	"net/http"
@@ -25,7 +29,7 @@ func NewEnv() (*Env, error) {
 		log.Println("Env file not found, going with environment variables")
 	}
 	return &Env{
-		Port: os.Getenv("PORT"),
+		Port:     os.Getenv("PORT"),
 		BuildEnv: os.Getenv("GO_ENV"),
 	}, nil
 }
@@ -36,7 +40,18 @@ func NewDB() (*gorm.DB, error) {
 	return repository.NewDB(maxRetries, maxDelay)
 }
 
-func NewRouter(lc fx.Lifecycle, env *Env) *gin.Engine {
+func Migrate(db *gorm.DB) error {
+	err := db.AutoMigrate(
+		&domain.User{},
+	)
+	if err != nil {
+		return err
+	}
+	log.Println("Database migration completed")
+	return nil
+}
+
+func NewRouter(lc fx.Lifecycle, env *Env, db *gorm.DB) *gin.Engine {
 	var r *gin.Engine
 
 	if env.BuildEnv == "production" {
@@ -55,6 +70,11 @@ func NewRouter(lc fx.Lifecycle, env *Env) *gin.Engine {
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
+			if err := Migrate(db); err != nil {
+				log.Fatalf("Failed to migrate database: %v", err)
+				return err
+			}
+
 			go func() {
 				err := r.Run(":" + env.Port)
 				if err != nil {
@@ -78,9 +98,14 @@ func main() {
 		fx.Provide(
 			NewEnv,
 			NewDB,
+			repository.NewUserRepository,
+			service.NewUserService,
+			handlers.NewUserHandler,
 			NewRouter,
 		),
-		fx.Invoke(func(*gin.Engine) {}),
+		fx.Invoke(
+			internal.RegisterAllRoutes,
+		),
 	)
 
 	app.Run()
