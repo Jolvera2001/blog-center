@@ -97,8 +97,8 @@ func main() {
 			NewEnv,
 			NewDB,
 			NewRouter,
+			modules.RegisterUserDependencies,
 		),
-		modules.RegisterUserDependencies(),
 	)
 
 	app.Run()
