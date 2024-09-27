@@ -1,10 +1,13 @@
 package service
 
-import "blog-center/internal/domain"
+import (
+	"blog-center/internal/domain"
+	"blog-center/internal/dtos"
+)
 
 type IUserService interface {
-	RegisterUser(name, email, password string) (*domain.User, error)
+	RegisterUser(dto dtos.UserDto) (*domain.User, error)
 	GetUserProfile(uuid string) (*domain.User, error)
-	UpdateUserProfile(name, email, password string) error
+	UpdateUserProfile(uuid string, dto dtos.UserDto) error
 	DeleteUserAccount(uuid string) error
 }
