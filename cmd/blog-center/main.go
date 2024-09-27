@@ -1,11 +1,9 @@
 package main
 
 import (
-	"blog-center/internal"
 	"blog-center/internal/domain"
-	"blog-center/internal/handlers"
+	"blog-center/internal/modules"
 	"blog-center/internal/repository"
-	"blog-center/internal/service"
 	"context"
 	"log"
 	"net/http"
@@ -98,14 +96,9 @@ func main() {
 		fx.Provide(
 			NewEnv,
 			NewDB,
-			repository.NewUserRepository,
-			service.NewUserService,
-			handlers.NewUserHandler,
 			NewRouter,
 		),
-		fx.Invoke(
-			internal.RegisterAllRoutes,
-		),
+		modules.RegisterUserDependencies(),
 	)
 
 	app.Run()
