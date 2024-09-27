@@ -10,7 +10,7 @@ type User struct {
 	CreatedAt time.Time
 }
 
-type UserRepository interface {
+type IUserRepository interface {
 	Create(user *User) error
 	FindByID(id int) (*User, error)
 	Update(id int) error

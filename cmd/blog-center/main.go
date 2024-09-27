@@ -9,7 +9,20 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"go.uber.org/fx"
 )
+
+func test() {
+	app := fx.New(
+		fx.Provide(
+			NewEnv,
+			NewDB,
+			NewRouter,
+		),
+	)
+
+	app.Run()
+}
 
 func main() {
 	err := godotenv.Load()
