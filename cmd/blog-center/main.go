@@ -2,6 +2,7 @@ package main
 
 import (
 	"blog-center/internal/domain"
+	"blog-center/internal/handlers"
 	"blog-center/internal/modules"
 	"blog-center/internal/repository"
 	"context"
@@ -101,7 +102,9 @@ func main() {
 			NewRouter,
 			modules.RegisterUserDependencies,
 		),
-		fx.Invoke(func(*gin.Engine) {}), // This ensures the router is created and started
+		fx.Invoke(func(engine *gin.Engine, userHandler * handlers.UserHandler) {
+			userHandler.GroupUserHandlers(engine)
+		}),
 	)
 
 	startCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)

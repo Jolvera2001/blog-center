@@ -15,6 +15,5 @@ func RegisterUserDependencies() fx.Option {
 			service.NewUserService,
 			handlers.NewUserHandler,	
 		),
-		fx.Invoke(handlers.GroupUserHandlers),
 	)
 }

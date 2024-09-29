@@ -80,7 +80,7 @@ func (h *UserHandler) DeleteUserProfile(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"Status": "Deleted"})
 }
 
-func GroupUserHandlers(r *gin.Engine, h *UserHandler) {
+func (h *UserHandler) GroupUserHandlers(r *gin.Engine) {
 	v1 := r.Group("api/v1") 
 	{
 		v1.GET("user/:userid", h.GetUserProfile)
