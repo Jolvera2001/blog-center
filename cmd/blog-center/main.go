@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -99,7 +101,23 @@ func main() {
 			NewRouter,
 			modules.RegisterUserDependencies,
 		),
+		fx.Invoke(func(*gin.Engine) {}), // This ensures the router is created and started
 	)
 
-	app.Run()
+	startCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	if err := app.Start(startCtx); err != nil {
+		log.Fatal(err)
+	}
+
+	// Use a channel to keep the main function from exiting
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	<-c
+
+	stopCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	if err := app.Stop(stopCtx); err != nil {
+		log.Fatal(err)
+	}
 }
