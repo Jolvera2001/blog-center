@@ -2,7 +2,6 @@ package main
 
 import (
 	"blog-center/internal/domain"
-	"blog-center/internal/handlers"
 	"blog-center/internal/modules"
 	"blog-center/internal/repository"
 	"context"
@@ -22,6 +21,11 @@ import (
 type Env struct {
 	Port     string
 	BuildEnv string
+}
+
+func printDotGraph(g fx.DotGraph) {
+	log.Println("Dependency Graph:")
+	log.Println(g)
 }
 
 func NewEnv() (*Env, error) {
@@ -100,11 +104,9 @@ func main() {
 			NewEnv,
 			NewDB,
 			NewRouter,
-			modules.RegisterUserDependencies,
 		),
-		fx.Invoke(func(engine *gin.Engine, userHandler * handlers.UserHandler) {
-			userHandler.GroupUserHandlers(engine)
-		}),
+		modules.RegisterUserDependencies(),
+		fx.Invoke(printDotGraph),
 	)
 
 	startCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
