@@ -27,7 +27,11 @@ func (r *UserRepository) FindByID(uuid string) (*domain.User, error) {
 }
 
 func (r *UserRepository) Update(user *domain.User) error {
-	return r.DB.Save(user).Error
+	return r.DB.Model(user).Updates(map[string]interface{}{
+		"name": user.Name,
+		"email": user.Email,
+		"password": user.Password,
+	}).Error
 }
 
 func (r *UserRepository) Delete(uuid string) error {

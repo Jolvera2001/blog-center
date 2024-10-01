@@ -12,7 +12,7 @@ import (
 func NewDB(retries int, retryDelay time.Duration) (*gorm.DB, error) {
 	dsn := os.Getenv("DB_DSN")
 	if dsn == "" {
-		return nil, fmt.Errorf("DB_DSN environment variable not set!")
+		return nil, fmt.Errorf("DB_DSN environment variable not set")
 	}
 
 	for i := 0; i < retries; i++ {
