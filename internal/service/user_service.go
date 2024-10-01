@@ -3,6 +3,7 @@ package service
 import (
 	"blog-center/internal/domain"
 	"blog-center/internal/dtos"
+	"log"
 
 	"github.com/google/uuid"
 )
@@ -46,6 +47,7 @@ func (s *UserService) GetUserProfile(id string) (*domain.User, error) {
 func (s *UserService) UpdateUserProfile(id string, dto dtos.UserDto) error {
 	existingUser, err := s.UserRepo.FindByID(id)
 	if err != nil {
+		log.Printf("Error finding user by ID: %+v", dto)
 		return err
 	}
 

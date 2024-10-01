@@ -26,8 +26,8 @@ func NewDB(retries int, retryDelay time.Duration) (*gorm.DB, error) {
 		sqlDB, err := db.DB()
 		if err != nil {
 			return nil, err
-		}	
-	
+		}
+
 		err = sqlDB.Ping()
 		if err == nil {
 			fmt.Println("Successfully connected to database")
@@ -35,9 +35,8 @@ func NewDB(retries int, retryDelay time.Duration) (*gorm.DB, error) {
 		}
 
 		fmt.Printf("Failed to ping database: %v. Retrying in %v...\n", err, retryDelay)
-        time.Sleep(retryDelay)
+		time.Sleep(retryDelay)
 	}
-
 
 	return nil, fmt.Errorf("failed to connect to the database after %d attempts", retries)
 }
