@@ -66,12 +66,14 @@ func (h *UserHandler) UpdateUserProfile(c *gin.Context) {
 }
 
 func (h *UserHandler) DeleteUserProfile(c *gin.Context) {
-	var id string
-	if err := c.ShouldBindJSON(&id); err != nil {
+	userId := c.Param("userid")
 
+	if userId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"Error": "Field empty"})
+		return
 	}
 
-	err := h.UserService.DeleteUserAccount(id)
+	err := h.UserService.DeleteUserAccount(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error": "error with internal process"})
 		return
@@ -86,6 +88,6 @@ func GroupUserHandlers(r *gin.Engine, h *UserHandler) {
 		v1.GET("user/:userid", h.GetUserProfile)
 		v1.POST("user/create", h.CreateUserProfile)
 		v1.PUT("user/update", h.UpdateUserProfile)
-		v1.DELETE("user/delete", h.DeleteUserProfile)
+		v1.DELETE("user/delete/:userid", h.DeleteUserProfile)
 	}
 }

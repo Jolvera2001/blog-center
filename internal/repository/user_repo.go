@@ -35,5 +35,5 @@ func (r *UserRepository) Update(user *domain.User) error {
 }
 
 func (r *UserRepository) Delete(uuid string) error {
-	return r.DB.Delete(&domain.User{}, uuid).Error
+	return r.DB.Where("id = ?", uuid).Delete(&domain.User{ID: uuid}).Error
 }

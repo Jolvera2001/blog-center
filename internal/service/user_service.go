@@ -32,7 +32,8 @@ func (s *UserService) RegisterUser(dto dtos.UserDto) (string, error) {
 }
 
 func (s *UserService) GetUserProfile(id string) (*domain.User, error) {
-	if _, err := uuid.Parse(id); err != nil {
+	err := verifyUuid(id)
+	if err != nil {
 		return &domain.User{}, err
 	}
 
@@ -65,5 +66,20 @@ func (s *UserService) UpdateUserProfile(id string, dto dtos.UserDto) error {
 }
 
 func (s *UserService) DeleteUserAccount(id string) error {
+	err := verifyUuid(id)
+	if err != nil {
+		return err
+	}
+
 	return s.UserRepo.Delete(id)
 }
+
+func verifyUuid(id string) error {
+	log.Println("Uuid: ", id)
+	if _, err := uuid.Parse(id); err != nil {
+		return err
+	}
+
+	return nil
+}
+

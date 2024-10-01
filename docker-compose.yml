@@ -12,11 +12,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    develop:
-      watch:
-      - action: sync+restart
-        path: ./
-        target: ./app
 
   db: # Mysql db
     image: mysql:8.0
