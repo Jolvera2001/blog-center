@@ -38,7 +38,7 @@ func (h *UserHandler) GetUserProfile(c *gin.Context) {
 	
 	res, err := h.UserService.GetUserProfile(userId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": "error with internal process"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error() })
 		return
 	}
 

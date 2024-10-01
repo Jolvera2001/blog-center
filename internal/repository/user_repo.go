@@ -20,7 +20,7 @@ func (r *UserRepository) Create(user *domain.User) error {
 
 func (r *UserRepository) FindByID(uuid string) (*domain.User, error) {
 	var user domain.User
-	if err := r.DB.First(&user, uuid).Error; err != nil {
+	if err := r.DB.Where("id = ?", uuid).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil

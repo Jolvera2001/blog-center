@@ -3,6 +3,8 @@ package service
 import (
 	"blog-center/internal/domain"
 	"blog-center/internal/dtos"
+
+	"github.com/google/uuid"
 )
 
 type UserService struct {
@@ -28,8 +30,12 @@ func (s *UserService) RegisterUser(dto dtos.UserDto) (string, error) {
 	return newUser.ID, nil
 }
 
-func (s *UserService) GetUserProfile(uuid string) (*domain.User, error) {
-	foundUser, err := s.UserRepo.FindByID(uuid)
+func (s *UserService) GetUserProfile(id string) (*domain.User, error) {
+	if _, err := uuid.Parse(id); err != nil {
+		return &domain.User{}, err
+	}
+
+	foundUser, err := s.UserRepo.FindByID(id)
 	if err != nil {
 		return &domain.User{}, err
 	}
@@ -37,8 +43,8 @@ func (s *UserService) GetUserProfile(uuid string) (*domain.User, error) {
 	return foundUser, nil
 }
 
-func (s *UserService) UpdateUserProfile(uuid string, dto dtos.UserDto) error {
-	existingUser, err := s.UserRepo.FindByID(uuid)
+func (s *UserService) UpdateUserProfile(id string, dto dtos.UserDto) error {
+	existingUser, err := s.UserRepo.FindByID(id)
 	if err != nil {
 		return err
 	}
@@ -56,6 +62,6 @@ func (s *UserService) UpdateUserProfile(uuid string, dto dtos.UserDto) error {
 	return s.UserRepo.Update(existingUser)
 }
 
-func (s *UserService) DeleteUserAccount(uuid string) error {
-	return s.UserRepo.Delete(uuid)
+func (s *UserService) DeleteUserAccount(id string) error {
+	return s.UserRepo.Delete(id)
 }
